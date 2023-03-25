@@ -10,8 +10,7 @@ import ru.tyshchenko.vkr.entity.Column;
 import ru.tyshchenko.vkr.entity.EntityInfo;
 import ru.tyshchenko.vkr.entity.java.ColumnTypeMapper;
 import ru.tyshchenko.vkr.entity.types.ConstraintType;
-import ru.tyshchenko.vkr.factory.entity.EntityFactory;
-import ru.tyshchenko.vkr.util.StringUtils;
+import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -43,10 +42,11 @@ public class HibernateEntityFactory implements AppEntityFactory {
         for (EntityInfo entity : entityInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder entityBuilder = new StringBuilder(entityPattern);
-            replaceIdField(entityBuilder, entity.getPrimaryKey());
-            replaceEntityName(entityBuilder, entity.getEntityName());
+            replaceByRegex(entityBuilder, "${idName}", toCamelCase(entity.getPrimaryKey()));
+            replaceByRegex(entityBuilder, PatternUtils.CLASS_NAME,
+                    toUpperCaseFirstLetter(toCamelCase(entity.getEntityName())));
             String fields = buildDefaultFields(entity.getColumns(), imports);
-            replaceFields(entityBuilder, fields);
+            replaceByRegex(entityBuilder, PatternUtils.FIELDS, fields);
             StringBuilder refBuilder = new StringBuilder();
             for (EntityInfo entityTo : entity.getEntityTo()) {
                 refBuilder.append(addManyToOneField(entityTo.getEntityName()));
@@ -54,23 +54,11 @@ public class HibernateEntityFactory implements AppEntityFactory {
             for (EntityInfo entityFrom : entity.getEntityFrom()) {
                 refBuilder.append(addOneToManyField(entity.getEntityName(), entityFrom.getEntityName()));
             }
-            replaceRefers(entityBuilder, refBuilder.toString());
+            replaceByRegex(entityBuilder, "${entity_references}", refBuilder.toString());
             replaceImports(entityBuilder, imports);
             entities.add(entityBuilder.toString());
         }
         return entities;
-    }
-
-    private void replaceIdField(StringBuilder builder, String idColumnName) {
-        String pattern = "${idName}";
-        int index = builder.indexOf(pattern);
-        builder.replace(index, index + pattern.length(), toCamelCase(idColumnName));
-    }
-
-    private void replaceRefers(StringBuilder builder, String refers) {
-        String pattern = "${entity_references}";
-        int start = builder.indexOf(pattern);
-        builder.replace(start, start + pattern.length(), refers);
     }
 
     private String addOneToManyField(String mappedBy, String toRef) {
@@ -84,26 +72,12 @@ public class HibernateEntityFactory implements AppEntityFactory {
                 TAB + "private " + toUpperCaseFirstLetter(toCamelCase(mappedBy)) + " " + toCamelCase(mappedBy) + "s;\n";
     }
 
-    private void replaceFields(StringBuilder builder, String fields) {
-        String pattern = "${entity_fields}";
-        int index = builder.indexOf(pattern);
-        builder.replace(index, index + pattern.length(), fields);
-    }
-
     private void replaceImports(StringBuilder builder, Set<String> imports) {
         StringBuilder importString = new StringBuilder();
         for (String imp : imports) {
             importString.append("import ").append(imp).append(";\n");
         }
-        String pattern = "${imports}";
-        int startIndex = builder.indexOf(pattern);
-        builder.replace(startIndex, startIndex + pattern.length(), importString.toString());
-    }
-
-    private void replaceEntityName(StringBuilder builder, String entityName) {
-        String pattern = "${entity_name}";
-        int start = builder.indexOf(pattern);
-        builder.replace(start, start + pattern.length(), toUpperCaseFirstLetter(toCamelCase(entityName)));
+        replaceByRegex(builder, PatternUtils.IMPORTS, importString.toString());
     }
 
     private String buildDefaultFields(List<Column> columns, Set<String> imports) {

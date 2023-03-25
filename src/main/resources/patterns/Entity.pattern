@@ -13,10 +13,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ${entity_name} {
+public class ${class_name} {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ${idName};
-${entity_fields}
+${fields}
 ${entity_references}
 }

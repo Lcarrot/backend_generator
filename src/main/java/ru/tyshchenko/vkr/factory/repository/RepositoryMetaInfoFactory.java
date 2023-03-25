@@ -53,9 +53,9 @@ public class RepositoryMetaInfoFactory {
     private List<ArgumentInfo> buildArguments(Column column, OperationCondition operationCondition) {
         if (operationCondition == OperationCondition.BETWEEN) {
             return List.of(ArgumentInfo.builder().type(column.getType())
-                            .name(column.getName() + operationCondition.name() + "Less").build(),
+                            .name(column.getName() + operationCondition.name() + "LESS").build(),
                     ArgumentInfo.builder().type(column.getType())
-                            .name(column.getName() + operationCondition.name() + "Greater").build()
+                            .name(column.getName() + operationCondition.name() + "GREATER").build()
             );
         }
         return List.of(ArgumentInfo.builder().type(column.getType())

@@ -7,9 +7,10 @@ import ru.tyshchenko.vkr.entity.Column;
 import ru.tyshchenko.vkr.entity.EntityInfo;
 import ru.tyshchenko.vkr.entity.types.ColumnType;
 import ru.tyshchenko.vkr.entity.types.ConstraintType;
-import ru.tyshchenko.vkr.factory.entity.EntityFactory;
 
 import java.util.List;
+
+import static ru.tyshchenko.vkr.util.StringUtils.replaceByRegex;
 
 @Component
 @RequiredArgsConstructor
@@ -33,22 +34,10 @@ public class PostgresSqlFactory implements SqlEntityFactory {
 
     private String buildEntity(EntityInfo entity) {
         StringBuilder entityBuilder = new StringBuilder(TABLE_PATTERN);
-        replaceEntityName(entityBuilder, entity.getEntityName());
+        replaceByRegex(entityBuilder, "${table_name}", entity.getEntityName());
         String fields = buildFields(entity.getPrimaryKey(), entity.getColumns());
-        replaceFields(entityBuilder, fields);
+        replaceByRegex(entityBuilder, "${fields}", fields);
         return entityBuilder.toString();
-    }
-
-    private void replaceEntityName(StringBuilder stringBuilder, String entityName) {
-        String tablePattern = "${table_name}";
-        int startIndex = stringBuilder.indexOf(tablePattern);
-        stringBuilder.replace(startIndex, startIndex + tablePattern.length(), entityName);
-    }
-
-    private void replaceFields(StringBuilder builder, String fields) {
-        String fieldPattern = "${fields}";
-        int startIndex = builder.indexOf(fieldPattern);
-        builder.replace(startIndex, startIndex + fieldPattern.length(), fields);
     }
 
     private String buildFields(String primaryKey, List<Column> columns) {

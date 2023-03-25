@@ -1,6 +1,6 @@
 package ru.tyshchenko.vkr.util;
 
-public class StringUtils {
+public final class StringUtils {
 
     public static final String TAB = "    ";
 

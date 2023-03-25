@@ -13,6 +13,7 @@ import ru.tyshchenko.vkr.repository.meta.ArgumentInfo;
 import ru.tyshchenko.vkr.repository.meta.ConditionInfo;
 import ru.tyshchenko.vkr.repository.meta.MethodInfo;
 import ru.tyshchenko.vkr.repository.meta.RepositoryInfo;
+import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -44,16 +45,16 @@ public class JpaRepositoryFactory implements RepositoryFactory {
         for (RepositoryInfo repositoryInfo : repositoryInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder repositoryBuilder = new StringBuilder(repositoryPattern);
-            replaceByRegex(repositoryBuilder, "${entity_name}",
+            replaceByRegex(repositoryBuilder, PatternUtils.ENTITY,
                     toUpperCaseFirstLetter(toCamelCase(repositoryInfo.getEntityName())));
-            replaceByRegex(repositoryBuilder, "${repository_name}",
+            replaceByRegex(repositoryBuilder, PatternUtils.CLASS_NAME,
                     toUpperCaseFirstLetter(toCamelCase(repositoryInfo.getName())));
             StringBuilder methods = new StringBuilder();
             for (MethodInfo methodInfo : repositoryInfo.getMethodInfos()) {
                 methods.append(buildMethod(methodInfo, repositoryInfo.getEntityName(), imports));
             }
-            replaceByRegex(repositoryBuilder, "${methods}", methods.toString());
-            replaceByRegex(repositoryBuilder, "${imports}", buildImports(imports));
+            replaceByRegex(repositoryBuilder, PatternUtils.METHODS, methods.toString());
+            replaceByRegex(repositoryBuilder, PatternUtils.IMPORTS, buildImports(imports));
             repos.add(repositoryBuilder.toString());
         }
         return repos;
