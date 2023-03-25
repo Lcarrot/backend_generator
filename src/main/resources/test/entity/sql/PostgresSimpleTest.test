@@ -1,0 +1,3 @@
+CREATE TABLE new_entity (pr_key bigserial CONSTRAINT prkey PRIMARY KEY,test_field TEXT NOT_NULL);
+ALTER TABLE new_entity ADD COLUMN test_entity_id BIGINT REFERENCES test_entity(pr_key);
+CREATE TABLE test_entity (pr_key bigserial CONSTRAINT prkey PRIMARY KEY,test_field TEXT NOT_NULL);

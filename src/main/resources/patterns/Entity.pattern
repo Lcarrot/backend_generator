@@ -1,0 +1,22 @@
+package ${project_packet}.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+${imports}
+
+import javax.persistence.*;
+
+@Builder
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class ${entity_name} {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long ${idName};
+${entity_fields}
+${entity_references}
+}
