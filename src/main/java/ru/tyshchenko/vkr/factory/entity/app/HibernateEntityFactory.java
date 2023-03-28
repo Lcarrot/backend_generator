@@ -6,10 +6,10 @@ import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
-import ru.tyshchenko.vkr.entity.Column;
-import ru.tyshchenko.vkr.entity.EntityInfo;
-import ru.tyshchenko.vkr.entity.java.ColumnTypeMapper;
-import ru.tyshchenko.vkr.entity.types.ConstraintType;
+import ru.tyshchenko.vkr.dto.entity.meta.Column;
+import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.dto.entity.java.ColumnTypeMapper;
+import ru.tyshchenko.vkr.dto.entity.types.ConstraintType;
 import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
@@ -53,6 +53,7 @@ public class HibernateEntityFactory implements AppEntityFactory {
             }
             for (EntityInfo entityFrom : entity.getEntityFrom()) {
                 refBuilder.append(addOneToManyField(entity.getEntityName(), entityFrom.getEntityName()));
+                imports.add("java.util.List");
             }
             replaceByRegex(entityBuilder, "${entity_references}", refBuilder.toString());
             replaceImports(entityBuilder, imports);
@@ -93,8 +94,12 @@ public class HibernateEntityFactory implements AppEntityFactory {
             imports.add("javax.validation.constraints.NotNull");
             builder.append(TAB).append("@NotNull").append("\n");
         }
+        ColumnTypeMapper.Type type = columnTypeMapper.mapType(column.getType());
+        if (type.packet() != null) {
+            imports.add(type.packet() + "." + type.type());
+        }
         builder.append(TAB).append("private ")
-                .append(columnTypeMapper.mapType(column.getType())).append(" ")
+                .append(type.type()).append(" ")
                 .append(toCamelCase(column.getName())).append(";\n");
     }
 }

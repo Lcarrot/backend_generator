@@ -3,10 +3,10 @@ package ru.tyshchenko.vkr.factory.entity.sql;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import ru.tyshchenko.vkr.entity.Column;
-import ru.tyshchenko.vkr.entity.EntityInfo;
-import ru.tyshchenko.vkr.entity.types.ColumnType;
-import ru.tyshchenko.vkr.entity.types.ConstraintType;
+import ru.tyshchenko.vkr.dto.entity.meta.Column;
+import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.dto.entity.types.ColumnType;
+import ru.tyshchenko.vkr.dto.entity.types.ConstraintType;
 
 import java.util.List;
 

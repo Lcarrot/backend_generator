@@ -2,52 +2,91 @@ package ru.tyshchenko.vkr.factory.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.tyshchenko.vkr.entity.Column;
-import ru.tyshchenko.vkr.entity.EntityInfo;
-import ru.tyshchenko.vkr.repository.enums.OperationCondition;
-import ru.tyshchenko.vkr.repository.enums.ReturnType;
-import ru.tyshchenko.vkr.repository.meta.ArgumentInfo;
-import ru.tyshchenko.vkr.repository.meta.ConditionInfo;
-import ru.tyshchenko.vkr.repository.meta.MethodInfo;
-import ru.tyshchenko.vkr.repository.meta.RepositoryInfo;
-import ru.tyshchenko.vkr.repository.source.RepositorySource;
+import ru.tyshchenko.vkr.dto.entity.meta.Column;
+import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.dto.repository.enums.LinkCondition;
+import ru.tyshchenko.vkr.dto.repository.enums.OperationCondition;
+import ru.tyshchenko.vkr.dto.repository.enums.ReturnType;
+import ru.tyshchenko.vkr.dto.repository.meta.ArgumentInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.ConditionInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.RepositoryInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.RepositoryMethodInfo;
+import ru.tyshchenko.vkr.dto.repository.source.RepositoryMethodCondition;
+import ru.tyshchenko.vkr.dto.repository.source.RepositorySource;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
+import static ru.tyshchenko.vkr.util.ClassNameUtils.REPOSITORY;
+import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
+import static ru.tyshchenko.vkr.util.StringUtils.toUpperCaseFirstLetter;
 
 @Component
 @RequiredArgsConstructor
 public class RepositoryMetaInfoFactory {
 
-    public List<RepositoryInfo> buildRepositoryInfo(List<RepositorySource> repositorySources,
-                                                    Map<String, EntityInfo> entityInfoMap) {
-        return repositorySources.stream().map(repositorySource -> {
-            var repInfo = RepositoryInfo.builder()
-                    .name(repositorySource.getName())
+    public Map<String, RepositoryInfo> buildRepositoryInfo(List<RepositorySource> repositorySources,
+                                                           Map<String, EntityInfo> entityInfoMap) {
+        Map<String, RepositoryInfo> result = new HashMap<>();
+        for (var repositorySource : repositorySources) {
+            var repositoryInfo = RepositoryInfo.builder()
+                    .name(repositorySource.getName() + REPOSITORY)
                     .entityName(repositorySource.getEntityName())
                     .build();
             Map<String, Column> columnMap = entityInfoMap.get(repositorySource.getEntityName()).getColumns()
                     .stream().collect(toMap(Column::getName, Function.identity()));
-            repInfo.setMethodInfos(repositorySource.getMethodSources().stream().map(methodSource ->
-                    MethodInfo.builder()
-                            .returnType(ReturnType.valueOf(methodSource.returnType.toUpperCase()))
-                            .conditionInfos(methodSource.condition.stream().map(condition ->
-                                    ConditionInfo.builder()
-                                            .column(columnMap.get(condition.getField()))
-                                            .linkCondition(condition.getLink())
-                                            .argumentInfos(buildArguments(columnMap.get(condition.getField()),
-                                                    condition.getOperationCondition()))
-                                            .operationCondition(condition.getOperationCondition())
-                                            .build()
-                            ).collect(Collectors.toList()))
-                            .build()).collect(Collectors.toList())
-            );
-            return repInfo;
-        }).collect(Collectors.toList());
+            for (var methodSource : repositorySource.getRepositoryMethodSources()) {
+                var repMethodInfo = RepositoryMethodInfo.builder()
+                        .returnType(ReturnType.valueOf(methodSource.returnType.toUpperCase()))
+                        .conditionInfos(methodSource.condition.stream()
+                                .map(condition -> getConditionInfo(condition, columnMap))
+                                .collect(Collectors.toList()))
+                        .build();
+                repMethodInfo.setName(buildMethodName(repMethodInfo.getConditionInfos()));
+                repositoryInfo.getRepositoryMethodInfos().put(repMethodInfo.getName(), repMethodInfo);
+            }
+            result.put(repositoryInfo.getName(), repositoryInfo);
+        }
+        return result;
+    }
+
+    private String buildMethodName(List<ConditionInfo> conditionInfos) {
+        StringBuilder methodNameBuilder = new StringBuilder("findBy");
+        for (ConditionInfo conditionInfo : conditionInfos) {
+            methodNameBuilder.append(buildConditionName(conditionInfo));
+        }
+        return methodNameBuilder.toString();
+    }
+
+    private String buildConditionName(ConditionInfo conditionInfo) {
+        StringBuilder conditionBuilder = new StringBuilder();
+        conditionBuilder.append(toUpperCaseFirstLetter(toCamelCase(conditionInfo.getColumn().getName())));
+        switch (conditionInfo.getOperationCondition()) {
+            case EQUAL_IGNORE_CASE, EQUAL -> conditionBuilder.append(
+                    toUpperCaseFirstLetter(toCamelCase(conditionInfo.getOperationCondition().name().toLowerCase()
+                            .replace("equal", ""))));
+            default -> conditionBuilder.append(
+                    toUpperCaseFirstLetter(toCamelCase(conditionInfo.getOperationCondition().name().toLowerCase())));
+        }
+        if (conditionInfo.getLinkCondition() != null) {
+            conditionBuilder.append(toUpperCaseFirstLetter(conditionInfo.getLinkCondition().name().toLowerCase()));
+        }
+        return conditionBuilder.toString();
+    }
+
+    private ConditionInfo getConditionInfo(RepositoryMethodCondition condition, Map<String, Column> columnMap) {
+        return ConditionInfo.builder()
+                .column(columnMap.get(condition.getField()))
+                .linkCondition(condition.getLink() == null ? null :
+                        LinkCondition.valueOf(condition.getLink().toUpperCase()))
+                .argumentInfos(buildArguments(columnMap.get(condition.getField()),
+                        OperationCondition.valueOf(condition.getOperationCondition().toUpperCase())))
+                .operationCondition(OperationCondition.valueOf(condition.getOperationCondition()))
+                .build();
     }
 
     private List<ArgumentInfo> buildArguments(Column column, OperationCondition operationCondition) {

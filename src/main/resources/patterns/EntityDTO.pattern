@@ -1,0 +1,24 @@
+package ${project_packet}.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ${project_packet}.entity.${entity_name};
+${imports}
+
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ${entity_name}Dto {
+
+${fields}
+
+    public static ${entity_name}Dto from(${entity_name} entity) {
+        return ${entity_name}Dto
+            .builder()
+${build_methods}
+            .build();
+    }
+}

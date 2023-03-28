@@ -1,6 +1,6 @@
 package ru.tyshchenko.vkr.factory.entity;
 
-import ru.tyshchenko.vkr.entity.EntityInfo;
+import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
 
 import java.util.List;
 

@@ -1,0 +1,5 @@
+    public ${return_dto_class} ${method_name}(${request_dto_class} ${request_dto}) {
+        ${return_dto_class} ${return_dto} = new ${return_dto_class}();
+${main_part}
+        return ${return_dto};
+    }

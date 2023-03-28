@@ -1,0 +1,2 @@
+        ${return_dto}.get${entity_dto_name}().add(${repository_name}.${repository_method}(${arguments})
+                                                            .map(${entity_dto_name}::from).orElse(null));

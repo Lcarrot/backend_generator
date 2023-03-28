@@ -1,0 +1,13 @@
+package ${project_packet}.repository;
+
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+${imports}
+
+@Service
+@RequiredArgsConstructor
+public class ${class_name}Service {
+
+${fields}
+${methods}
+}

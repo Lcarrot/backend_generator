@@ -1,13 +1,17 @@
 package ru.tyshchenko.vkr.factory.entity;
 
 import org.springframework.stereotype.Component;
-import ru.tyshchenko.vkr.entity.source.Entity;
-import ru.tyshchenko.vkr.entity.EntityInfo;
-import ru.tyshchenko.vkr.entity.source.ReferenceColumn;
-import ru.tyshchenko.vkr.entity.types.ReferenceType;
+import ru.tyshchenko.vkr.dto.entity.meta.Column;
+import ru.tyshchenko.vkr.dto.entity.source.Entity;
+import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.dto.entity.source.ReferenceColumn;
+import ru.tyshchenko.vkr.dto.entity.types.ColumnType;
+import ru.tyshchenko.vkr.dto.entity.types.ConstraintType;
+import ru.tyshchenko.vkr.dto.entity.types.ReferenceType;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -18,12 +22,17 @@ public class EntityInfoMetaInfoFactory {
         Map<String, EntityInfo> entityInfoMap = entityInfos.stream().map(entity ->
                 EntityInfo.builder()
                         .entityName(entity.getEntityName())
-                        .columns(entity.getColumns())
+                        .columns(entity.getColumns().stream().map(columnSource -> Column.builder()
+                                .type(ColumnType.valueOf(columnSource.getType()))
+                                .name(columnSource.getName())
+                                .constraintTypes(columnSource.getConstraintTypes().stream()
+                                        .map(ConstraintType::valueOf).collect(Collectors.toSet()))
+                                .build()).collect(Collectors.toList()))
                         .primaryKey(entity.getPrimaryKey())
                         .build()
         ).collect(toMap(EntityInfo::getEntityName, Function.identity()));
         for (ReferenceColumn referenceColumn : referenceColumns) {
-            if (referenceColumn.getReferenceType() == ReferenceType.ONE_TO_MANY) {
+            if (ReferenceType.valueOf(referenceColumn.getReferenceType().toUpperCase()) == ReferenceType.ONE_TO_MANY) {
                 entityInfoMap.get(referenceColumn.getEntityTo()).getEntityFrom()
                         .add(entityInfoMap.get(referenceColumn.getEntityFrom()));
                 entityInfoMap.get(referenceColumn.getEntityFrom()).getEntityTo()

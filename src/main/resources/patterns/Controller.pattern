@@ -1,0 +1,14 @@
+package ${project_packet}.controller;
+
+import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+
+@RestController
+@RequiredArgsConstructor
+public class ${class_name}Controller {
+
+${fields}
+
+${methods}
+}

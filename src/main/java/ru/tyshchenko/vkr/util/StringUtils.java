@@ -18,6 +18,10 @@ public final class StringUtils {
         return source.substring(0, 1).toUpperCase() + source.substring(1);
     }
 
+    public static String toLowerCaseFirstLetter(String source) {
+        return source.substring(0, 1).toLowerCase() + source.substring(1);
+    }
+
     public static void replaceByRegex(StringBuilder builder, String pattern, String value) {
         int start = builder.indexOf(pattern);
         while (start != -1) {

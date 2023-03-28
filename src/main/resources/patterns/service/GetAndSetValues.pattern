@@ -1,0 +1,3 @@
+        ${return_dto}.get${entity_dto_name}.addAll(${repository_name}.${repository_method}(${arguments})
+                                                            .stream()
+                                                            .map(${entity_dto_name}::from).toList());

@@ -6,20 +6,17 @@ import lombok.SneakyThrows;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
-import ru.tyshchenko.vkr.entity.java.ColumnTypeMapper;
+import ru.tyshchenko.vkr.dto.entity.java.ColumnTypeMapper;
 import ru.tyshchenko.vkr.factory.repository.RepositoryFactory;
-import ru.tyshchenko.vkr.repository.enums.ReturnType;
-import ru.tyshchenko.vkr.repository.meta.ArgumentInfo;
-import ru.tyshchenko.vkr.repository.meta.ConditionInfo;
-import ru.tyshchenko.vkr.repository.meta.MethodInfo;
-import ru.tyshchenko.vkr.repository.meta.RepositoryInfo;
+import ru.tyshchenko.vkr.dto.repository.enums.ReturnType;
+import ru.tyshchenko.vkr.dto.repository.meta.ArgumentInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.ConditionInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.RepositoryMethodInfo;
+import ru.tyshchenko.vkr.dto.repository.meta.RepositoryInfo;
 import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ru.tyshchenko.vkr.util.StringUtils.*;
 
@@ -40,7 +37,7 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public List<String> buildRepository(List<RepositoryInfo> repositoryInfos) {
+    public List<String> buildRepository(Collection<RepositoryInfo> repositoryInfos) {
         List<String> repos = new ArrayList<>();
         for (RepositoryInfo repositoryInfo : repositoryInfos) {
             Set<String> imports = new HashSet<>();
@@ -50,8 +47,8 @@ public class JpaRepositoryFactory implements RepositoryFactory {
             replaceByRegex(repositoryBuilder, PatternUtils.CLASS_NAME,
                     toUpperCaseFirstLetter(toCamelCase(repositoryInfo.getName())));
             StringBuilder methods = new StringBuilder();
-            for (MethodInfo methodInfo : repositoryInfo.getMethodInfos()) {
-                methods.append(buildMethod(methodInfo, repositoryInfo.getEntityName(), imports));
+            for (RepositoryMethodInfo repositoryMethodInfo : repositoryInfo.getRepositoryMethodInfos().values()) {
+                methods.append(buildMethod(repositoryMethodInfo, repositoryInfo.getEntityName(), imports));
             }
             replaceByRegex(repositoryBuilder, PatternUtils.METHODS, methods.toString());
             replaceByRegex(repositoryBuilder, PatternUtils.IMPORTS, buildImports(imports));
@@ -68,10 +65,10 @@ public class JpaRepositoryFactory implements RepositoryFactory {
         return importString.toString();
     }
 
-    private String buildMethod(MethodInfo methodInfo, String entityName, Set<String> imports) {
+    private String buildMethod(RepositoryMethodInfo repositoryMethodInfo, String entityName, Set<String> imports) {
         StringBuilder methodBuilder = new StringBuilder();
         StringBuilder argumentBuilder = new StringBuilder();
-        if (methodInfo.getReturnType() == ReturnType.ENTITY_LIST) {
+        if (repositoryMethodInfo.getReturnType() == ReturnType.ENTITY_LIST) {
             imports.add("java.util.List");
             methodBuilder.append(TAB).append("List<")
                     .append(toUpperCaseFirstLetter(toCamelCase(entityName))).append("> ");
@@ -80,38 +77,18 @@ public class JpaRepositoryFactory implements RepositoryFactory {
             methodBuilder.append(TAB).append("Optional<")
                     .append(toUpperCaseFirstLetter(toCamelCase(entityName))).append("> ");
         }
-        methodBuilder.append("findBy");
-        for (ConditionInfo conditionInfo : methodInfo.getConditionInfos()) {
-            methodBuilder.append(buildCondition(conditionInfo));
+        methodBuilder.append(repositoryMethodInfo.getName());
+        for (ConditionInfo conditionInfo : repositoryMethodInfo.getConditionInfos()) {
             for (ArgumentInfo argumentInfo : conditionInfo.getArgumentInfos()) {
-                String type = columnTypeMapper.mapType(argumentInfo.getType());
-                if (type.contains(".")) {
-                    imports.add(type);
-                    String[] typesPart = type.split("\\.");
-                    type = typesPart[typesPart.length - 1];
+                ColumnTypeMapper.Type type = columnTypeMapper.mapType(argumentInfo.getType());
+                if (type.packet() != null) {
+                    imports.add(type.packet() + "." + type.type());
                 }
-                argumentBuilder.append(type).append(" ").append(toCamelCase(argumentInfo.getName())).append(", ");
+                argumentBuilder.append(type.type()).append(" ").append(toCamelCase(argumentInfo.getName())).append(", ");
             }
         }
         argumentBuilder.replace(argumentBuilder.length() - 2, argumentBuilder.length() - 1, "");
         methodBuilder.append("(").append(argumentBuilder).append(");\n");
         return methodBuilder.toString();
     }
-
-    private String buildCondition(ConditionInfo conditionInfo) {
-        StringBuilder conditionBuilder = new StringBuilder();
-        conditionBuilder.append(toUpperCaseFirstLetter(toCamelCase(conditionInfo.getColumn().getName())));
-        switch (conditionInfo.getOperationCondition()) {
-            case EQUAL_IGNORE_CASE, EQUAL -> conditionBuilder.append(
-                    toUpperCaseFirstLetter(toCamelCase(conditionInfo.getOperationCondition().name().toLowerCase()
-                            .replace("equal", ""))));
-            default -> conditionBuilder.append(
-                    toUpperCaseFirstLetter(toCamelCase(conditionInfo.getOperationCondition().name().toLowerCase())));
-        }
-        if (conditionInfo.getLinkCondition() != null) {
-            conditionBuilder.append(toUpperCaseFirstLetter(conditionInfo.getLinkCondition().name().toLowerCase()));
-        }
-        return conditionBuilder.toString();
-    }
-
 }

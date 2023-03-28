@@ -7,4 +7,5 @@ public final class PatternUtils {
     public static String CLASS_NAME = "${class_name}";
     public static String FIELDS = "${fields}";
     public static String PROJECT_PATH = "${project_packet}";
+    public static String METHOD_NAME = "$method_name";
 }
