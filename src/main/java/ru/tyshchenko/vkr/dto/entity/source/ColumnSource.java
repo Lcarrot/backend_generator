@@ -15,5 +15,6 @@ public class ColumnSource {
 
     private String type;
     private String name;
-    private Set<String> constraintTypes;
+    private boolean isUnique;
+    private boolean isNotNull;
 }

@@ -13,6 +13,6 @@ import java.util.List;
 public class RepositoryMethodSource {
 
     public String returnType;
-    public List<RepositoryMethodCondition> condition;
+    public List<RepositoryMethodCondition> conditions;
 
 }

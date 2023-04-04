@@ -27,9 +27,9 @@ public class ResponseDtoFactory {
                 ResourceUtils.getFile("classpath:patterns/ResponseDTO.pattern").toPath());
     }
 
-    public List<String> buildDtos(List<ServiceMethodInfo> serviceMethodInfos,
+    public Map<String, String> buildDtos(List<ServiceMethodInfo> serviceMethodInfos,
                                   Map<String, EntityDtoInfo> entityDtoInfoMap) {
-        List<String> dtos = new ArrayList<>();
+        Map<String, String> dtos = new HashMap<>();
         for (var serviceMethodInfo: serviceMethodInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder dtoBuilder = new StringBuilder(dtoPattern);
@@ -38,12 +38,12 @@ public class ResponseDtoFactory {
             StringBuilder fieldsBuilder = new StringBuilder();
             for (var repositoryInfo :serviceMethodInfo.getRepositoryMethodInfos().keySet()) {
                 String name = toCamelCase(entityDtoInfoMap.get(repositoryInfo).getName());
-                imports.add("${project_packet}.dto." + toUpperCaseFirstLetter(name));
+                imports.add("${packet}.dto." + toUpperCaseFirstLetter(name));
                 fieldsBuilder.append(TAB).append("List<").append(toUpperCaseFirstLetter(name)).append(">").append(" ").append(name).append(";\n");
             }
             replaceByRegex(dtoBuilder, PatternUtils.FIELDS, fieldsBuilder.toString());
             replaceByRegex(dtoBuilder, PatternUtils.IMPORTS, buildImports(imports));
-            dtos.add(dtoBuilder.toString());
+            dtos.put(serviceMethodInfo.getReturnDto().getName(), dtoBuilder.toString());
         }
         return dtos;
     }

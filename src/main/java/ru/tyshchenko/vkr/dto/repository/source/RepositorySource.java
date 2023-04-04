@@ -15,5 +15,5 @@ public class RepositorySource {
 
     private String name;
     private String entityName;
-    private List<RepositoryMethodSource> repositoryMethodSources;
+    private List<RepositoryMethodSource> repositoryMethods;
 }

@@ -1,0 +1,4 @@
+    @GetMapping(value = "${mapping}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<${response_dto}> ${methodName}(@RequestParam ${request_dto_class} ${request_dto}) {
+         return ResponseEntity.ok(${service_name}.${service_method}(${request_dto}));
+    }

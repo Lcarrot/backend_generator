@@ -37,8 +37,8 @@ public class JpaRepositoryFactory implements RepositoryFactory {
     }
 
     @Override
-    public List<String> buildRepository(Collection<RepositoryInfo> repositoryInfos) {
-        List<String> repos = new ArrayList<>();
+    public Map<String, String> buildRepository(Collection<RepositoryInfo> repositoryInfos) {
+        Map<String, String> repos = new HashMap<>();
         for (RepositoryInfo repositoryInfo : repositoryInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder repositoryBuilder = new StringBuilder(repositoryPattern);
@@ -52,7 +52,7 @@ public class JpaRepositoryFactory implements RepositoryFactory {
             }
             replaceByRegex(repositoryBuilder, PatternUtils.METHODS, methods.toString());
             replaceByRegex(repositoryBuilder, PatternUtils.IMPORTS, buildImports(imports));
-            repos.add(repositoryBuilder.toString());
+            repos.put(repositoryInfo.getName(), repositoryBuilder.toString());
         }
         return repos;
     }

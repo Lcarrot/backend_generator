@@ -53,6 +53,24 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>>${flyway.version}</version>
+                <configuration>
+                    <user>${spring.datasource.username}</user>
+                    <password>${spring.datasource.password}</password>
+                    <url>${spring.datasource.url}</url>
+                    <locations>filesystem:db/migrations</locations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${postgresql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 

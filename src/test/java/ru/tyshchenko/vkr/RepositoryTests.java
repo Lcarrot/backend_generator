@@ -1,16 +1,15 @@
 package ru.tyshchenko.vkr;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.tyshchenko.vkr.dto.dto.request.RequestPartDto;
+import ru.tyshchenko.vkr.dto.controller.source.ControllerMethodSource;
+import ru.tyshchenko.vkr.dto.controller.source.ControllerSource;
 import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
 import ru.tyshchenko.vkr.dto.entity.source.ColumnSource;
 import ru.tyshchenko.vkr.dto.entity.source.Entity;
 import ru.tyshchenko.vkr.dto.entity.source.ReferenceColumn;
 import ru.tyshchenko.vkr.dto.entity.types.ColumnType;
-import ru.tyshchenko.vkr.dto.entity.types.ConstraintType;
 import ru.tyshchenko.vkr.dto.entity.types.ReferenceType;
 import ru.tyshchenko.vkr.dto.repository.enums.LinkCondition;
 import ru.tyshchenko.vkr.dto.repository.enums.OperationCondition;
@@ -23,6 +22,7 @@ import ru.tyshchenko.vkr.dto.service.meta.ServiceInfo;
 import ru.tyshchenko.vkr.dto.service.source.ServiceMethodSource;
 import ru.tyshchenko.vkr.dto.service.source.ServiceRepositoryMethodSource;
 import ru.tyshchenko.vkr.dto.service.source.ServiceSource;
+import ru.tyshchenko.vkr.factory.controller.SpringRestControllerFactory;
 import ru.tyshchenko.vkr.factory.dto.entity.DtoMetaInfoFactory;
 import ru.tyshchenko.vkr.factory.dto.request.RequestDtoFactory;
 import ru.tyshchenko.vkr.factory.dto.response.ResponseDtoFactory;
@@ -37,8 +37,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -61,17 +59,19 @@ class RepositoryTests {
     private ResponseDtoFactory responseDtoFactory;
     @Autowired
     private RequestDtoFactory requestDtoFactory;
+    @Autowired
+    private SpringRestControllerFactory springRestControllerFactory;
 
     private List<Entity> getEntities() {
         ColumnSource column = ColumnSource.builder()
                 .name("test_field")
                 .type(ColumnType.TEXT.name())
-                .constraintTypes(Stream.of(ConstraintType.NOT_NULL.name()).collect(Collectors.toSet()))
+                .isUnique(true)
                 .build();
         ColumnSource secColumn = ColumnSource.builder()
                 .name("date_field")
                 .type(ColumnType.TIMESTAMP.name())
-                .constraintTypes(Stream.of(ConstraintType.NOT_NULL.name()).collect(Collectors.toSet()))
+                .isNotNull(true)
                 .build();
         Entity firstEntity = Entity.builder()
                 .entityName("test_entity")
@@ -95,7 +95,7 @@ class RepositoryTests {
                 .build());
     }
 
-    private List<EntityInfo> getEntityMetaInfo() {
+    private Map<String, EntityInfo> getEntityMetaInfo() {
         return entityInfoMetaInfoFactory.getMetaInfo(getEntities(), getReferenceColumns());
     }
 
@@ -104,7 +104,7 @@ class RepositoryTests {
         RepositoryMethodSource repositoryMethodSource = RepositoryMethodSource
                 .builder()
                 .returnType(ReturnType.ENTITY.name().toLowerCase())
-                .condition(List.of(
+                .conditions(List.of(
                         RepositoryMethodCondition.builder()
                                 .operationCondition(OperationCondition.EQUAL_IGNORE_CASE.name())
                                 .field("test_field")
@@ -119,10 +119,9 @@ class RepositoryTests {
         RepositorySource source = RepositorySource.builder()
                 .entityName(getEntities().get(0).getEntityName())
                 .name("test_rep")
-                .repositoryMethodSources(List.of(repositoryMethodSource))
+                .repositoryMethods(List.of(repositoryMethodSource))
                 .build();
-        return new ArrayList<>(repositoryMetaInfoFactory.buildRepositoryInfo(List.of(source),
-                entityInfos.stream().collect(toMap(EntityInfo::getEntityName, Function.identity()))).values());
+        return new ArrayList<>(repositoryMetaInfoFactory.buildRepositoryInfo(List.of(source), entityInfos).values());
     }
 
     private Map<String, ServiceInfo> serviceInfos() {
@@ -165,5 +164,18 @@ class RepositoryTests {
     void buildRequestDto() {
         System.out.println(requestDtoFactory.buildDtos(serviceInfos().values()
                 .stream().map(ServiceInfo::getServiceMethodInfos).flatMap(Collection::stream).toList()));
+    }
+
+    @Test
+    void testControllers() {
+        var controllerSource = new ControllerSource();
+        controllerSource.setName("Test");
+        controllerSource.setServiceName("TestService");
+        var controllerMethodSource = new ControllerMethodSource();
+        controllerMethodSource.setServiceMethod("testMethod");
+        controllerMethodSource.setMapping("/hello/world");
+        controllerMethodSource.setName("test");
+        controllerSource.setControllerMethodSources(List.of(controllerMethodSource));
+        System.out.println(springRestControllerFactory.buildControllers(List.of(controllerSource), serviceInfos()));
     }
 }

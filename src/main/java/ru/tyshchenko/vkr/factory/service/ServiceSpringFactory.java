@@ -21,7 +21,7 @@ import static ru.tyshchenko.vkr.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor
-public class ServiceSpringFactory {
+public class ServiceSpringFactory implements ServiceFactory {
 
     private String servicePattern;
     private String serviceMethodPattern;
@@ -41,8 +41,8 @@ public class ServiceSpringFactory {
                 ResourceUtils.getFile("classpath:patterns/service/GetAndSetValues.pattern").toPath());
     }
 
-    public List<String> buildServices(List<ServiceInfo> serviceInfos, Map<String, EntityDtoInfo> entityDtoInfoMap) {
-        List<String> services = new ArrayList<>();
+    public Map<String, String> buildServices(List<ServiceInfo> serviceInfos, Map<String, EntityDtoInfo> entityDtoInfoMap) {
+        Map<String, String> services = new HashMap<>();
         for (var serviceInfo : serviceInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder serviceBuilder = new StringBuilder(servicePattern);
@@ -57,7 +57,7 @@ public class ServiceSpringFactory {
             }
             replaceByRegex(serviceBuilder, PatternUtils.METHODS, methodsBuilder.toString());
             replaceByRegex(serviceBuilder, PatternUtils.IMPORTS, buildImports(imports));
-            services.add(serviceBuilder.toString());
+            services.put(serviceInfo.getName(), serviceBuilder.toString());
         }
         return services;
     }
@@ -76,7 +76,7 @@ public class ServiceSpringFactory {
             fieldBuilder.append(TAB).append("private final ")
                     .append(toUpperCaseFirstLetter(toCamelCase(service))).append(" ")
                     .append(toCamelCase(service)).append(";\n");
-            imports.add("${project_packet}.repository." + toUpperCaseFirstLetter(toCamelCase(service)));
+            imports.add("${packet}.repository." + toUpperCaseFirstLetter(toCamelCase(service)));
         }
         return fieldBuilder.toString();
     }
@@ -86,11 +86,11 @@ public class ServiceSpringFactory {
                                Set<String> imports) {
         StringBuilder methodBuilder = new StringBuilder(serviceMethodPattern);
         String returnName = toCamelCase(serviceMethodInfo.getReturnDto().getName());
-        imports.add("${project_packet}.dto.response." + toUpperCaseFirstLetter(toCamelCase(returnName)));
+        imports.add("${packet}.dto.response." + toUpperCaseFirstLetter(toCamelCase(returnName)));
         replaceByRegex(methodBuilder, "${return_dto}", toLowerCaseFirstLetter(returnName));
         replaceByRegex(methodBuilder, "${return_dto_class}", toUpperCaseFirstLetter(returnName));
         String requestName = toCamelCase(serviceMethodInfo.getRequestDto().getName());
-        imports.add("${project_packet}.dto.request." + toUpperCaseFirstLetter(toCamelCase(requestName)));
+        imports.add("${packet}.dto.request." + toUpperCaseFirstLetter(toCamelCase(requestName)));
         replaceByRegex(methodBuilder, "${request_dto}", toLowerCaseFirstLetter(requestName));
         replaceByRegex(methodBuilder, "${request_dto_class}", toUpperCaseFirstLetter(requestName));
         replaceByRegex(methodBuilder, "${method_name}", serviceMethodInfo.getMethodName());
@@ -102,7 +102,7 @@ public class ServiceSpringFactory {
                         ? serviceSetValuePattern : serviceSetValuesPattern);
                 String dtoName = entityDtoInfoMap.get(repName).getName();
                 replaceByRegex(setBuilder, "${entity_dto_name}", toUpperCaseFirstLetter(toCamelCase(dtoName)));
-                imports.add("${project_packet}.dto." + toUpperCaseFirstLetter(toCamelCase(dtoName)));
+                imports.add("${packet}.dto." + toUpperCaseFirstLetter(toCamelCase(dtoName)));
                 replaceByRegex(setBuilder, "${return_dto}", returnName);
                 replaceByRegex(setBuilder, "${repository_name}", toCamelCase(repName));
                 replaceByRegex(setBuilder, "${repository_method}", repMethodInfo.getName());

@@ -4,8 +4,9 @@ import ru.tyshchenko.vkr.dto.repository.meta.RepositoryInfo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface RepositoryFactory {
 
-    List<String> buildRepository(Collection<RepositoryInfo> repositoryInfos);
+    Map<String, String> buildRepository(Collection<RepositoryInfo> repositoryInfos);
 }

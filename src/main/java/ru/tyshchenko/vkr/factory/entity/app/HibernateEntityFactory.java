@@ -13,10 +13,7 @@ import ru.tyshchenko.vkr.dto.entity.types.ConstraintType;
 import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ru.tyshchenko.vkr.util.StringUtils.*;
 
@@ -37,8 +34,8 @@ public class HibernateEntityFactory implements AppEntityFactory {
     }
 
     @Override
-    public List<String> buildEntities(List<EntityInfo> entityInfos) {
-        List<String> entities = new ArrayList<>();
+    public Map<String, String> buildEntities(List<EntityInfo> entityInfos) {
+        Map<String, String> entities = new HashMap<>();
         for (EntityInfo entity : entityInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder entityBuilder = new StringBuilder(entityPattern);
@@ -57,7 +54,7 @@ public class HibernateEntityFactory implements AppEntityFactory {
             }
             replaceByRegex(entityBuilder, "${entity_references}", refBuilder.toString());
             replaceImports(entityBuilder, imports);
-            entities.add(entityBuilder.toString());
+            entities.put(entity.getEntityName(), entityBuilder.toString());
         }
         return entities;
     }

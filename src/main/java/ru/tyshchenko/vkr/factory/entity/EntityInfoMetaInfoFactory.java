@@ -18,16 +18,24 @@ import static java.util.stream.Collectors.toMap;
 @Component
 public class EntityInfoMetaInfoFactory {
 
-    public List<EntityInfo> getMetaInfo(List<Entity> entityInfos, List<ReferenceColumn> referenceColumns) {
+    public Map<String, EntityInfo> getMetaInfo(List<Entity> entityInfos, List<ReferenceColumn> referenceColumns) {
         Map<String, EntityInfo> entityInfoMap = entityInfos.stream().map(entity ->
                 EntityInfo.builder()
                         .entityName(entity.getEntityName())
-                        .columns(entity.getColumns().stream().map(columnSource -> Column.builder()
-                                .type(ColumnType.valueOf(columnSource.getType()))
-                                .name(columnSource.getName())
-                                .constraintTypes(columnSource.getConstraintTypes().stream()
-                                        .map(ConstraintType::valueOf).collect(Collectors.toSet()))
-                                .build()).collect(Collectors.toList()))
+                        .columns(entity.getColumns().stream().map(columnSource -> {
+                            Set<ConstraintType> constraintTypes = new HashSet<>();
+                            if (columnSource.isUnique()) {
+                                constraintTypes.add(ConstraintType.UNIQUE);
+                            }
+                            if (columnSource.isNotNull()) {
+                                constraintTypes.add(ConstraintType.NOT_NULL);
+                            }
+                            return Column.builder()
+                                    .type(ColumnType.valueOf(columnSource.getType()))
+                                    .name(columnSource.getName())
+                                    .constraintTypes(constraintTypes)
+                                    .build();
+                        }).collect(Collectors.toList()))
                         .primaryKey(entity.getPrimaryKey())
                         .build()
         ).collect(toMap(EntityInfo::getEntityName, Function.identity()));
@@ -39,6 +47,6 @@ public class EntityInfoMetaInfoFactory {
                         .add(entityInfoMap.get(referenceColumn.getEntityTo()));
             }
         }
-        return new ArrayList<>(entityInfoMap.values());
+        return entityInfoMap;
     }
 }

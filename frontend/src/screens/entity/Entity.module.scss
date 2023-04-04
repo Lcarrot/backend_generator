@@ -1,0 +1,13 @@
+.entity {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  //grid-template-rows: repeat(3, 50%);
+  gap: 10px;
+}
+
+.entity-form {
+  display: flex;
+  position: sticky;
+  justify-content: center;
+  width: 70%;
+}

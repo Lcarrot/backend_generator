@@ -1,10 +1,10 @@
-package ${project_packet}.dto;
+package ${packet}.dto.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ${project_packet}.entity.${entity_name};
+import ${packet}.entity.${entity_name};
 ${imports}
 
 @Builder

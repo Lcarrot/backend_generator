@@ -1,4 +1,4 @@
-package ${project_packet}.entity;
+package ${packet}.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

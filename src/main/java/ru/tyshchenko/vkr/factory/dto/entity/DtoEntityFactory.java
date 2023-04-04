@@ -18,7 +18,7 @@ import static ru.tyshchenko.vkr.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor
-public class DtoFactory {
+public class DtoEntityFactory {
 
     private final ColumnTypeMapper columnTypeMapper;
 
@@ -31,8 +31,8 @@ public class DtoFactory {
                 ResourceUtils.getFile("classpath:patterns/EntityDTO.pattern").toPath());
     }
 
-    public List<String> buildDto(List<EntityDtoInfo> dtoInfos, Map<String, EntityInfo> entityInfoMap) {
-        List<String> entities = new ArrayList<>();
+    public Map<String, String> buildDto(List<EntityDtoInfo> dtoInfos, Map<String, EntityInfo> entityInfoMap) {
+        Map<String, String> entities = new HashMap<>();
         for (var dto : dtoInfos) {
             var imports = new HashSet<String>();
             var entity = entityInfoMap.get(dto.getEntityName());
@@ -43,7 +43,7 @@ public class DtoFactory {
             replaceByRegex(entityBuilder, PatternUtils.FIELDS, fields);
             replaceByRegex(entityBuilder, "${build_methods}", buildTo(entity.getColumns()));
             replaceImports(entityBuilder, imports);
-            entities.add(entityBuilder.toString());
+            entities.put(entity.getEntityName(), entityBuilder.toString());
         }
         return entities;
     }

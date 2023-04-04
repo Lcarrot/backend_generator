@@ -1,14 +1,16 @@
-package ${project_packet}.controller;
+package ${packet}.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import ${packet}.service.${service_class};
 
 @RestController
 @RequiredArgsConstructor
 public class ${class_name}Controller {
 
-${fields}
+    private final ${service_class} ${service_name};
 
 ${methods}
 }

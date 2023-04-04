@@ -9,4 +9,6 @@ public final class PathUtils {
     public static Path TEST_PATH = Path.of("src", "test", "java");
     public static Path POM_XML = Path.of("pom.xml");
     public static Path APP_PROPERTIES = SOURCE_PATH.resolve("resources").resolve("application.properties");
+
+    public static String EXTENSION = ".java";
 }

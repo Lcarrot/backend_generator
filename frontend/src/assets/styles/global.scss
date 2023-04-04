@@ -1,0 +1,54 @@
+/* optional reset for presentation */
+* {
+  font-family: Arial, serif;
+  text-decoration: none;
+  font-size: 1rem;
+}
+.container {
+  padding-top: 50px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.formContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 2rem;
+  margin: 2rem 2rem;
+  color: #211414;
+}
+
+h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1rem;
+  margin: 2rem 2rem;
+  color: #3b2323;
+}
+
+span {
+  display: block;
+  margin-top: 2rem;
+  font-size: .7rem;
+  color: #777;
+  a {
+    font-size: .7rem;
+    color: #999;
+    text-decoration: underline;
+  }
+}
+
+p{
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+}

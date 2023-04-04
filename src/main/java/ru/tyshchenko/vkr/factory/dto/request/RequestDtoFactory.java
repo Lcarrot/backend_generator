@@ -38,8 +38,8 @@ public class RequestDtoFactory {
     }
 
 
-    public List<String> buildDtos(List<ServiceMethodInfo> serviceMethodInfos) {
-        List<String> dtos = new ArrayList<>();
+    public Map<String, String> buildDtos(List<ServiceMethodInfo> serviceMethodInfos) {
+        Map<String, String> dtos = new HashMap<>();
         for (var serviceMethodInfo : serviceMethodInfos) {
             Set<String> imports = new HashSet<>();
             StringBuilder dtoBuilder = new StringBuilder(dtoPattern);
@@ -50,7 +50,7 @@ public class RequestDtoFactory {
                     .flatMap(Collection::stream)
                     .toList(), imports));
             replaceByRegex(dtoBuilder, PatternUtils.IMPORTS, buildImports(imports));
-            dtos.add(dtoBuilder.toString());
+            dtos.put(serviceMethodInfo.getRequestDto().getName(), dtoBuilder.toString());
         }
         return dtos;
     }

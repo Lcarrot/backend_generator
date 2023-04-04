@@ -1,7 +1,7 @@
-package ${project_packet}.repository;
+package ${packet}.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ${project_packet}.entity.${entity_name};
+import ${packet}.entity.${entity_name};
 ${imports}
 
 public interface ${class_name}Repository extends JpaRepository<${entity_name}, Long> {
