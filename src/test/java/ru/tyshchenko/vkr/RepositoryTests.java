@@ -119,7 +119,7 @@ class RepositoryTests {
         RepositorySource source = RepositorySource.builder()
                 .entityName(getEntities().get(0).getEntityName())
                 .name("test_rep")
-                .repositoryMethods(List.of(repositoryMethodSource))
+                .methods(List.of(repositoryMethodSource))
                 .build();
         return new ArrayList<>(repositoryMetaInfoFactory.buildRepositoryInfo(List.of(source), entityInfos).values());
     }
@@ -127,16 +127,16 @@ class RepositoryTests {
     private Map<String, ServiceInfo> serviceInfos() {
         var repInfo = getRepInfo().get(0);
         ServiceSource serviceSource = new ServiceSource();
-        serviceSource.setServiceName("Test");
+        serviceSource.setName("Test");
         var methodSource = new ServiceMethodSource();
         methodSource.setName("testMethod");
         var repMethod = new ServiceRepositoryMethodSource();
         repMethod.setRepositoryName(repInfo.getName());
-        repMethod.setMethodName(repInfo.getRepositoryMethodInfos()
+        repMethod.setRepositoryMethod(repInfo.getRepositoryMethodInfos()
                 .values().stream()
                 .findAny().get().getName());
-        methodSource.setServiceRepositoryMethodSources(List.of(repMethod));
-        serviceSource.setMethodSources(List.of(methodSource));
+        methodSource.setRepositoryMethods(List.of(repMethod));
+        serviceSource.setMethods(List.of(methodSource));
         return serviceMetaInfoFactory.buildServiceInfo(List.of(serviceSource), getRepInfo().stream()
                 .collect(toMap(RepositoryInfo::getName, Function.identity())));
     }
@@ -170,12 +170,12 @@ class RepositoryTests {
     void testControllers() {
         var controllerSource = new ControllerSource();
         controllerSource.setName("Test");
-        controllerSource.setServiceName("TestService");
+        controllerSource.setService("TestService");
         var controllerMethodSource = new ControllerMethodSource();
         controllerMethodSource.setServiceMethod("testMethod");
-        controllerMethodSource.setMapping("/hello/world");
+        controllerMethodSource.setPath("/hello/world");
         controllerMethodSource.setName("test");
-        controllerSource.setControllerMethodSources(List.of(controllerMethodSource));
+        controllerSource.setMethods(List.of(controllerMethodSource));
         System.out.println(springRestControllerFactory.buildControllers(List.of(controllerSource), serviceInfos()));
     }
 }

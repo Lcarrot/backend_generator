@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class ControllerMethodSource {
 
     private String name;
-    private String mapping;
+    private String path;
     private String serviceMethod;
 }

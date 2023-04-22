@@ -1,16 +1,18 @@
 import {Form} from 'react-bootstrap';
+import styles from "./Input.module.scss";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function SwitchCheckbox({label, name, onChange, value}) {
-    return (
+    return <>
         <Form.Check
-            name={name}
-            value={value[name]}
-            type="switch"
+            className={styles.input}
             label={label}
-            id={crypto.randomUUID()}
+            name={name}
+            checked={value}
+            type="switch"
             onChange={onChange}
-        />)
+        />
+    </>
 }
 
 export default SwitchCheckbox;

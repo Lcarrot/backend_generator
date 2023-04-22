@@ -32,9 +32,9 @@ public class ServiceMetaInfoFactory {
         Map<String, ServiceInfo> serviceInfoMap = new HashMap<>();
         for (ServiceSource source : serviceSources) {
             ServiceInfo serviceInfo = new ServiceInfo();
-            serviceInfo.setName(source.getServiceName() + SERVICE);
+            serviceInfo.setName(source.getName() + SERVICE);
             var methodInfo = new ServiceMethodInfo();
-            for (ServiceMethodSource methodSource : source.getMethodSources()) {
+            for (ServiceMethodSource methodSource : source.getMethods()) {
                 methodInfo.setMethodName(methodSource.getName());
                 var requestDto = new RequestDto();
                 methodInfo.setRequestDto(requestDto);
@@ -42,17 +42,17 @@ public class ServiceMetaInfoFactory {
                 var containerDto = new ResponseDtoInfo();
                 methodInfo.setReturnDto(containerDto);
                 containerDto.setName(serviceInfo.getName() + toUpperCaseFirstLetter(methodSource.getName()) + "ResponseDto");
-                for (var serRepMethod : methodSource.getServiceRepositoryMethodSources()) {
+                for (var serRepMethod : methodSource.getRepositoryMethods()) {
                     RepositoryInfo repositoryInfo = repositoryInfoMap.get(serRepMethod.getRepositoryName());
                     var repMethodInfo = repositoryInfo.getRepositoryMethodInfos()
-                            .get(serRepMethod.getMethodName());
-                    requestDto.getRequestPartDtos().addAll(requestPartDtos(serRepMethod.getMethodName(),
+                            .get(serRepMethod.getRepositoryMethod());
+                    requestDto.getRequestPartDtos().addAll(requestPartDtos(serRepMethod.getRepositoryMethod(),
                             repMethodInfo.getConditionInfos()));
                     containerDto.getParts().add(partDtoInfo(repositoryInfo, repMethodInfo));
                     methodInfo.getRepositoryMethodInfos()
                             .computeIfAbsent(repositoryInfo.getName(), key -> new ArrayList<>())
                             .add(repositoryInfo.getRepositoryMethodInfos()
-                                    .get(serRepMethod.getMethodName()));
+                                    .get(serRepMethod.getRepositoryMethod()));
                 }
             }
             serviceInfo.getServiceMethodInfos().add(methodInfo);

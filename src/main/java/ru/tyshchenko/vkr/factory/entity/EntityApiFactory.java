@@ -16,7 +16,7 @@ public class EntityApiFactory implements ApiFactory<EntityApi, EntityInfo> {
     @Override
     public List<EntityApi> buildApi(List<EntityInfo> metaInfo) {
         return metaInfo.stream().map(info ->
-            EntityApi.builder().entityName(info.getEntityName())
+            EntityApi.builder().name(info.getEntityName())
                     .columns(info.getColumns().stream()
                             .map(Column::getName).collect(Collectors.toList()))
                     .build()

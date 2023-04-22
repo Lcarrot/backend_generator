@@ -24,10 +24,10 @@ public class EntityInfoMetaInfoFactory {
                         .entityName(entity.getEntityName())
                         .columns(entity.getColumns().stream().map(columnSource -> {
                             Set<ConstraintType> constraintTypes = new HashSet<>();
-                            if (columnSource.isUnique()) {
+                            if (columnSource.getIsUnique()) {
                                 constraintTypes.add(ConstraintType.UNIQUE);
                             }
-                            if (columnSource.isNotNull()) {
+                            if (columnSource.getIsNotNull()) {
                                 constraintTypes.add(ConstraintType.NOT_NULL);
                             }
                             return Column.builder()

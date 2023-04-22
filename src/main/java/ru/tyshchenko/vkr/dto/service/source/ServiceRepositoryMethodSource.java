@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.tyshchenko.vkr.dto.repository.meta.ArgumentInfo;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -15,5 +12,5 @@ import java.util.List;
 public class ServiceRepositoryMethodSource {
 
     private String repositoryName;
-    private String methodName;
+    private String repositoryMethod;
 }

@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.dto.service.source;
+package ru.tyshchenko.vkr.dto.entity.source;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceMethodSource {
+public class EntityGenerateRequest {
 
-    private String name;
-    private List<ServiceRepositoryMethodSource> repositoryMethods;
+    private List<Entity> entities;
+    private List<ReferenceColumn> references;
 }

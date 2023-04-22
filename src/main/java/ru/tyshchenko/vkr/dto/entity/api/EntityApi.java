@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class EntityApi {
 
-    private String entityName;
+    private String name;
     private List<String> columns;
 }

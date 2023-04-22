@@ -2,13 +2,11 @@ package ru.tyshchenko.vkr.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.tyshchenko.vkr.dto.repository.api.RepositoryApi;
-import ru.tyshchenko.vkr.dto.repository.source.RepositorySource;
-import ru.tyshchenko.vkr.service.RepositoryService;
+import ru.tyshchenko.vkr.dto.service.api.ServiceApi;
+import ru.tyshchenko.vkr.dto.service.source.ServiceSource;
+import ru.tyshchenko.vkr.service.ServiceService;
 
 import java.util.List;
 
@@ -17,15 +15,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServiceController {
 
-    private final RepositoryService repositoryService;
+    private final ServiceService serviceService;
 
     @PostMapping("/service/save")
-    public void buildServ(List<RepositorySource> sources) {
-        repositoryService.save(sources);
+    public void buildServ(@RequestBody List<ServiceSource> sources) {
+        serviceService.save(sources);
     }
 
     @GetMapping(value = "/service/get", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<RepositoryApi> getApisServ() {
-        return repositoryService.getApi();
+    public List<ServiceApi> getApisServ() {
+        return serviceService.getApi();
     }
 }

@@ -12,7 +12,6 @@ import ru.tyshchenko.vkr.dto.service.meta.ServiceMethodInfo;
 import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class SpringRestControllerFactory {
     }
 
     public Map<String, String> buildControllers(List<ControllerSource> controllerSources,
-                                         Map<String, ServiceInfo> serviceInfoMap) {
+                                                Map<String, ServiceInfo> serviceInfoMap) {
         Map<String, String> controllers = new HashMap<>();
         Map<String, Map<String, ServiceMethodInfo>> serviceMethodInfoMap = serviceInfoMap.entrySet()
                 .stream().collect(toMap(Map.Entry::getKey, entry -> entry.getValue()
@@ -47,13 +46,13 @@ public class SpringRestControllerFactory {
                         .stream().collect(toMap(ServiceMethodInfo::getMethodName, Function.identity()))));
         for (var controllerSource : controllerSources) {
             var controllerBuilder = new StringBuilder(controllerPattern);
-            replaceByRegex(controllerBuilder, PatternUtils.CLASS_NAME, controllerSource.getName());
+            replaceByRegex(controllerBuilder, PatternUtils.CLASS_NAME, toUpperCaseFirstLetter(toCamelCase(controllerSource.getName())));
             replaceByRegex(controllerBuilder, "${service_name}",
-                    toLowerCaseFirstLetter(toCamelCase(controllerSource.getServiceName())));
+                    toLowerCaseFirstLetter(toCamelCase(controllerSource.getService())));
             replaceByRegex(controllerBuilder, "${service_class}",
-                    toUpperCaseFirstLetter(toCamelCase(controllerSource.getServiceName())));
-            String methods = buildMethods(controllerSource.getControllerMethodSources(),
-                    serviceMethodInfoMap.get(controllerSource.getServiceName()), controllerSource.getServiceName());
+                    toUpperCaseFirstLetter(toCamelCase(controllerSource.getService())));
+            String methods = buildMethods(controllerSource.getMethods(),
+                    serviceMethodInfoMap.get(controllerSource.getService()), controllerSource.getService());
             replaceByRegex(controllerBuilder, "${methods}", methods);
             controllers.put(controllerSource.getName(), controllerBuilder.toString());
         }
@@ -66,7 +65,7 @@ public class SpringRestControllerFactory {
         for (var methodSource : methodSources) {
             var oneMethodBuilder = new StringBuilder(methodPattern);
             var serviceMethodInfo = serviceMethodInfoMap.get(methodSource.getServiceMethod());
-            replaceByRegex(oneMethodBuilder, "${mapping}", methodSource.getMapping());
+            replaceByRegex(oneMethodBuilder, "${mapping}", methodSource.getPath());
             replaceByRegex(oneMethodBuilder, "${response_dto}",
                     toUpperCaseFirstLetter(toCamelCase(serviceMethodInfo.getReturnDto().getName())));
             replaceByRegex(oneMethodBuilder, PatternUtils.METHOD_NAME, methodSource.getName());

@@ -39,7 +39,7 @@ public class RepositoryMetaInfoFactory {
                     .build();
             Map<String, Column> columnMap = entityInfoMap.get(repositorySource.getEntityName()).getColumns()
                     .stream().collect(toMap(Column::getName, Function.identity()));
-            for (var methodSource : repositorySource.getRepositoryMethods()) {
+            for (var methodSource : repositorySource.getMethods()) {
                 var repMethodInfo = RepositoryMethodInfo.builder()
                         .returnType(ReturnType.valueOf(methodSource.returnType.toUpperCase()))
                         .conditionInfos(methodSource.conditions.stream()

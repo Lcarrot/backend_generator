@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,6 +13,6 @@ public class ColumnSource {
 
     private String type;
     private String name;
-    private boolean isUnique;
-    private boolean isNotNull;
+    private Boolean isUnique;
+    private Boolean isNotNull;
 }

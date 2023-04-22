@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ServiceSource {
 
-    private String serviceName;
-    private List<ServiceMethodSource> methodSources;
+    private String name;
+    private List<ServiceMethodSource> methods;
 }

@@ -14,6 +14,6 @@ import java.util.List;
 public class ControllerSource {
 
     private String name;
-    private String serviceName;
-    private List<ControllerMethodSource> controllerMethodSources;
+    private String service;
+    private List<ControllerMethodSource> methods;
 }
