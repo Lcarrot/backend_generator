@@ -1,11 +1,24 @@
 package ru.tyshchenko.vkr.util;
 
+import lombok.SneakyThrows;
+import org.springframework.util.ResourceUtils;
+
+import java.nio.file.Files;
+import java.util.Set;
+
 public final class PatternUtils {
-    public static String ENTITY = "${entity_name}";
-    public static String IMPORTS = "${imports}";
-    public static String METHODS = "${methods}";
-    public static String CLASS_NAME = "${class_name}";
-    public static String FIELDS = "${fields}";
-    public static String PROJECT_PACKET = "${packet}";
-    public static String METHOD_NAME = "${method_name}";
+
+    @SneakyThrows
+    public static String getPatternFromResource(String path) {
+        return Files.readString(
+                ResourceUtils.getFile("classpath:" + path).toPath());
+    }
+
+    public static String buildImports(Set<String> imports) {
+        StringBuilder importString = new StringBuilder();
+        for (String imp : imports) {
+            importString.append("import ").append(imp).append(";\n");
+        }
+        return importString.toString();
+    }
 }

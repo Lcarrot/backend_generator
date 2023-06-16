@@ -6,7 +6,7 @@ ${imports}
 
 @Service
 @RequiredArgsConstructor
-public class ${class_name}Service {
+public class ${class_name} {
 
 ${fields}
 ${methods}

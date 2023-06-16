@@ -14,13 +14,13 @@ function RepositoryMethodCondition({columns, setCondition, condition, index}) {
         <div>
             <DropdownInput values={operationConditions} placeholder='Операция фильтрации'
                            onChange={onChangeTextFieldRepo}
-                           name='operationCondition'/>
+                           name='operationCondition' value={condition}/>
             <DropdownInput values={linkConditions} placeholder='Связь со следующим условием'
                            onChange={onChangeTextFieldRepo}
-                           name='link'/>
+                           name='link' value={condition}/>
             <DropdownInput values={['', ...columns]} placeholder='Поле сущности'
                            onChange={onChangeTextFieldRepo}
-                           name='field'/>
+                           name='field' value={condition}/>
         </div>)
 }
 

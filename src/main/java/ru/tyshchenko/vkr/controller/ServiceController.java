@@ -3,9 +3,8 @@ package ru.tyshchenko.vkr.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.tyshchenko.vkr.dto.repository.api.RepositoryApi;
-import ru.tyshchenko.vkr.dto.service.api.ServiceApi;
-import ru.tyshchenko.vkr.dto.service.source.ServiceSource;
+import ru.tyshchenko.vkr.engine.api.models.service.api.ServiceApi;
+import ru.tyshchenko.vkr.engine.api.models.service.source.ServiceSource;
 import ru.tyshchenko.vkr.service.ServiceService;
 
 import java.util.List;

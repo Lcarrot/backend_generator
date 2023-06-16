@@ -1,0 +1,2 @@
+    ${constraints}
+    private ${field_type} ${field_name};

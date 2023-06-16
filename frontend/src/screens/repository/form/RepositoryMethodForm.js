@@ -34,7 +34,7 @@ function RepositoryMethodForm({setMethod, method, index, entity}) {
         <>
             <p> Описание метода </p>
             <DropdownInput values={RETURN_TYPES} placeholder='Возвращаемый тип'
-                           onChange={onChangeTextFieldRepo} name='returnType'/>
+                           onChange={onChangeTextFieldRepo} name='returnType' value={method}/>
             <p> Описание условий фильтрации </p>
             {method.conditions.map((condition, i) =>
                 <RepositoryMethodCondition

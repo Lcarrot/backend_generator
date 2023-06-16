@@ -6,9 +6,9 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import ru.tyshchenko.vkr.context.SimpleBuilderContext;
-import ru.tyshchenko.vkr.dto.general.GeneralInfoDto;
+import ru.tyshchenko.vkr.engine.api.models.general.GeneralInfoDto;
+import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
 import ru.tyshchenko.vkr.util.PathUtils;
-import ru.tyshchenko.vkr.util.PatternUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,7 +112,7 @@ public class MainSpringMavenService {
         Path mainClass = javaCodePath.resolve(projectName + "Application" + PathUtils.EXTENSION);
         StringBuilder content = new StringBuilder(mainClassPattern);
         replaceByRegex(content, "${project}", projectName);
-        replaceByRegex(content, PatternUtils.PROJECT_PACKET, context.getPacket());
+        replaceByRegex(content, DefaultPlaceholder.PROJECT_PACKET, context.getPacket());
         Files.write(mainClass, content.toString().getBytes());
     }
 
@@ -122,7 +122,7 @@ public class MainSpringMavenService {
         Path mainClass = testPath.resolve(projectName + "Tests" + PathUtils.EXTENSION);
         StringBuilder content = new StringBuilder(testMainPattern);
         replaceByRegex(content, "${project}", projectName);
-        replaceByRegex(content, PatternUtils.PROJECT_PACKET, context.getPacket());
+        replaceByRegex(content, DefaultPlaceholder.PROJECT_PACKET, context.getPacket());
         Files.write(mainClass, content.toString().getBytes());
     }
 }

@@ -22,9 +22,9 @@ function ServiceRepositoryMethodForm({repoMethod, setRepoMethod, index, repos}) 
     return (
         <>
             <DropdownInput values={['', ...repos.map(repo => repo.name)]} name='repositoryName' onChange={changeRepo}
-                           placeholder='Выберите репозиторий'/>
+                           placeholder='Выберите репозиторий' value={repoMethod}/>
             <DropdownInput values={repo.methods} name='repositoryMethod' onChange={changeMethod}
-                           placeholder='Выберите репозиторий'/>
+                           placeholder='Выберите репозиторий' value={repoMethod}/>
         </>)
 }
 

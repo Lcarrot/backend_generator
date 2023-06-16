@@ -1,6 +1,7 @@
 package ru.tyshchenko.vkr.util;
 
 import lombok.SneakyThrows;
+import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +18,7 @@ public class UploadUtils {
             Files.createDirectories(dirPath);
         }
         for (var file : files.entrySet()) {
-            var value = file.getValue().replace(PatternUtils.PROJECT_PACKET, packet);
+            var value = file.getValue().replace(DefaultPlaceholder.PROJECT_PACKET, packet);
             var filePath = dirPath.resolve(toUpperCaseFirstLetter(toCamelCase(file.getKey())) + PathUtils.EXTENSION);
             Files.write(filePath, value.getBytes());
         }

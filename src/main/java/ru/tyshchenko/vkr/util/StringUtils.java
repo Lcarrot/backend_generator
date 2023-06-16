@@ -4,6 +4,10 @@ public final class StringUtils {
 
     public static final String TAB = "    ";
 
+    public static String toClassName(String source) {
+        return toUpperCaseFirstLetter(toCamelCase(source));
+    }
+
     public static String toCamelCase(String source) {
         StringBuilder builder = new StringBuilder(source);
         int index = builder.indexOf("_");

@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import ru.tyshchenko.vkr.context.SimpleBuilderContext;
-import ru.tyshchenko.vkr.dto.entity.api.EntityApi;
-import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
-import ru.tyshchenko.vkr.dto.entity.source.Entity;
-import ru.tyshchenko.vkr.dto.entity.source.ReferenceColumn;
-import ru.tyshchenko.vkr.factory.entity.EntityApiFactory;
-import ru.tyshchenko.vkr.factory.entity.EntityInfoMetaInfoFactory;
-import ru.tyshchenko.vkr.factory.entity.app.AppEntityFactory;
-import ru.tyshchenko.vkr.factory.entity.sql.SqlEntityFactory;
-import ru.tyshchenko.vkr.util.PathUtils;
-import ru.tyshchenko.vkr.util.PatternUtils;
+import ru.tyshchenko.vkr.engine.api.models.entity.api.EntityApi;
+import ru.tyshchenko.vkr.engine.api.models.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.engine.api.models.entity.source.Entity;
+import ru.tyshchenko.vkr.engine.api.models.entity.source.ReferenceColumn;
+import ru.tyshchenko.vkr.engine.impl.SupportedDbLanguage;
+import ru.tyshchenko.vkr.engine.impl.SupportedORMLanguage;
+import ru.tyshchenko.vkr.engine.resolver.entity.EntityApiFactory;
+import ru.tyshchenko.vkr.engine.resolver.entity.EntityInfoMetaInfoFactory;
+import ru.tyshchenko.vkr.engine.resolver.entity.app.EntityClassesResolver;
+import ru.tyshchenko.vkr.engine.resolver.entity.sql.SqlResolver;
 import ru.tyshchenko.vkr.util.UploadUtils;
 
 import java.nio.file.Files;
@@ -21,16 +21,13 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
-import static ru.tyshchenko.vkr.util.StringUtils.toUpperCaseFirstLetter;
-
 @Service
 @RequiredArgsConstructor
 public class EntityService {
 
     private final EntityInfoMetaInfoFactory metaInfoFactory;
-    private final AppEntityFactory appEntityFactory;
-    private final SqlEntityFactory sqlEntityFactory;
+    private final EntityClassesResolver appEntityResolver;
+    private final SqlResolver sqlResolver;
     private final EntityApiFactory entityApiFactory;
     private final SimpleBuilderContext context;
 
@@ -49,7 +46,7 @@ public class EntityService {
     @SneakyThrows
     private void saveEntityJava(List<EntityInfo> entityInfos) {
         Path projectPath = context.getSourceCodePath().resolve("entity");
-        Map<String, String> appEntities = appEntityFactory.buildEntities(entityInfos);
+        Map<String, String> appEntities = appEntityResolver.buildEntityClasses(entityInfos, SupportedORMLanguage.JAVA_HIBERNATE.name());
         UploadUtils.saveFile(projectPath, context.getPacket(), appEntities);
     }
 
@@ -59,7 +56,7 @@ public class EntityService {
         if (!Files.exists(projectPath)) {
             Files.createDirectories(projectPath);
         }
-        String sqlScript = sqlEntityFactory.buildEntities(entityInfos);
+        String sqlScript = sqlResolver.buildSql(entityInfos, SupportedDbLanguage.POSTGRESQL.name());
         var filePath = projectPath.resolve("V1_0__create_entities.sql");
         Files.write(filePath, sqlScript.getBytes());
     }

@@ -16,9 +16,13 @@ function ReferenceForm({onChange, index, entityNames, reference}) {
     return (
         <div className={styles.entityForm}>
             <h2>Описание связи сущностей</h2>
-            <DropdownInput values={["", ...entityNames]} placeholder='Название сущности' onChange={onChangeValue} name='entityTo'/>
-            <DropdownInput values={referenceTypes} onChange={onChangeValue} name='referenceType' currentValue={reference}/>
-            <DropdownInput values={["", ...entityNames]} placeholder='Название сущности' onChange={onChangeValue} name='entityFrom'/>
+            <DropdownInput value={reference} values={["", ...entityNames]} placeholder='Название сущности'
+                           onChange={onChangeValue} name='entityTo'/>
+            <DropdownInput values={referenceTypes} onChange={onChangeValue} name='referenceType'
+                           value={reference}/>
+            <DropdownInput value={reference} values={["", ...entityNames]} placeholder='Название сущности'
+                           onChange={onChangeValue}
+                           name='entityFrom'/>
         </div>)
 }
 

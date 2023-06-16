@@ -1,0 +1,2 @@
+    @OneToMany(mappedBy="${table_name}}")
+    private List<${field_type}> ${field_name};

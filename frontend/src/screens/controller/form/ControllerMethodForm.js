@@ -15,7 +15,7 @@ function ControllerMethodForm({method, setMethod, index, serviceMethods}) {
             <TextInput data={method} inputName='path' placeholder='Введите внешний путь к ресурсу'
                        onChange={handleTextInput}/>
             <DropdownInput values={['', ...serviceMethods]} name='serviceMethod' onChange={handleTextInput}
-                           placeholder='Выберите метод сервиса'/>
+                           placeholder='Выберите метод сервиса' value={method}/>
         </div>)
 }
 

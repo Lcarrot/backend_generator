@@ -3,10 +3,10 @@ package ru.tyshchenko.vkr.context;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.tyshchenko.vkr.dto.dto.entity.EntityDtoInfo;
-import ru.tyshchenko.vkr.dto.entity.meta.EntityInfo;
-import ru.tyshchenko.vkr.dto.repository.meta.RepositoryInfo;
-import ru.tyshchenko.vkr.dto.service.meta.ServiceInfo;
+import ru.tyshchenko.vkr.engine.api.models.dto.entity.EntityDtoInfo;
+import ru.tyshchenko.vkr.engine.api.models.entity.meta.EntityInfo;
+import ru.tyshchenko.vkr.engine.api.models.repository.meta.RepositoryInfo;
+import ru.tyshchenko.vkr.engine.api.models.service.meta.ServiceInfo;
 
 import java.nio.file.Path;
 import java.util.Map;

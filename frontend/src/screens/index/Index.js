@@ -20,7 +20,7 @@ function Index() {
                 console.log(response.ok)
                 setIsOk(response.ok)
                 if (response.ok) {
-                    navigate('/repository/constructor', {replace: true})
+                    navigate('/entity/constructor', {replace: true})
                 }
             })
     }

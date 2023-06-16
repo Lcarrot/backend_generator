@@ -48,7 +48,7 @@ function RepositoryForm({setRepos, index, repo, entities}) {
                 <TextInput placeholder='Название репозитория' inputName="name" data={repo}
                            onChange={onChangeTextFieldRepo}/>
                 <DropdownInput values={["", ...entityNames]} placeholder='Название сущности'
-                               onChange={onChangeEntity} name='entityName'/>
+                               onChange={onChangeEntity} name='entityName' value={repo}/>
                 {repo.methods.map((method, i) => <RepositoryMethodForm method={method} key={i} index={i}
                                                                        setMethod={onChangeMethod} entity={entity}/>)}
                 <Button variant="primary" onClick={addMethod}> Добавить метод </Button>

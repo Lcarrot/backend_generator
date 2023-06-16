@@ -29,7 +29,7 @@ let ColumnForm = ({setColumns, index, column}) => {
             <TextInput placeholder='Имя колонки' inputName='name'
                        data={column} onChange={onTextFieldChange}/>
             <DropdownInput values={columnTypes} title='Выберите тип колонки' name='type' currentValue={column}
-                           onChange={onTextFieldChange}/>
+                           onChange={onTextFieldChange} value={column}/>
             <SwitchCheckbox label="Сделать поле уникальным" name='isUnique'
                             onChange={onSwitchCheckboxDataChange} value={column.isUnique}/>
             <SwitchCheckbox label="Запретить пустое поле (NULL)" name='isNotNull' value={column.isNotNull}

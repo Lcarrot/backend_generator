@@ -87,7 +87,8 @@ function EntityScreen() {
         <div className={styles.entity}>
             {references.map((reference, index) => <ReferenceForm key={index}
                                                                  onChange={handleReference}
-                                                                 entityNames={entityFormsNames} index={index}
+                                                                 entityNames={entityFormsNames}
+                                                                 index={index}
                                                                  reference={reference}/>)}
         </div>
     </>)

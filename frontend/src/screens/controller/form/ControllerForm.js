@@ -54,7 +54,7 @@ function ControllerForm({controller, setController, index, services}) {
                                onChange={inputTextChange}/>
                     <DropdownInput name='service' placeholder='Выберите сервис'
                                    values={['', ...services.map(serv => serv.name)]}
-                                   onChange={changeService}/>
+                                   onChange={changeService} value={controller}/>
                     {controller.methods.map((method, ind) => <ControllerMethodForm key={ind} method={method} index={ind}
                                                                                    setMethod={handlerChangeMethod}
                                                                                    serviceMethods={service.methods}/>)}

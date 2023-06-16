@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tyshchenko.vkr.dto.general.GeneralInfoDto;
+import ru.tyshchenko.vkr.engine.api.models.general.GeneralInfoDto;
 import ru.tyshchenko.vkr.service.MainSpringMavenService;
 
 @RestController
