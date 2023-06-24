@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.service;
+package ru.tyshchenko.vkr.app.service;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.util;
+package ru.tyshchenko.vkr.engine.util;
 
 public final class StringUtils {
 

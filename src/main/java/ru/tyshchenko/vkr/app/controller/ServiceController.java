@@ -1,11 +1,11 @@
-package ru.tyshchenko.vkr.controller;
+package ru.tyshchenko.vkr.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.tyshchenko.vkr.engine.api.models.service.api.ServiceApi;
 import ru.tyshchenko.vkr.engine.api.models.service.source.ServiceSource;
-import ru.tyshchenko.vkr.service.ServiceService;
+import ru.tyshchenko.vkr.app.service.ServiceService;
 
 import java.util.List;
 

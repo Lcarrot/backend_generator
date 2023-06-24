@@ -1,9 +1,9 @@
-package ru.tyshchenko.vkr.service;
+package ru.tyshchenko.vkr.app.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import ru.tyshchenko.vkr.context.SimpleBuilderContext;
+import ru.tyshchenko.vkr.app.context.SimpleBuilderContext;
 import ru.tyshchenko.vkr.engine.api.models.entity.api.EntityApi;
 import ru.tyshchenko.vkr.engine.api.models.entity.meta.EntityInfo;
 import ru.tyshchenko.vkr.engine.api.models.entity.source.Entity;
@@ -14,7 +14,7 @@ import ru.tyshchenko.vkr.engine.resolver.entity.EntityApiFactory;
 import ru.tyshchenko.vkr.engine.resolver.entity.EntityInfoMetaInfoFactory;
 import ru.tyshchenko.vkr.engine.resolver.entity.app.EntityClassesResolver;
 import ru.tyshchenko.vkr.engine.resolver.entity.sql.SqlResolver;
-import ru.tyshchenko.vkr.util.UploadUtils;
+import ru.tyshchenko.vkr.engine.util.UploadUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

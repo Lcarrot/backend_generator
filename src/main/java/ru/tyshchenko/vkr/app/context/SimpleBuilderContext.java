@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.context;
+package ru.tyshchenko.vkr.app.context;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

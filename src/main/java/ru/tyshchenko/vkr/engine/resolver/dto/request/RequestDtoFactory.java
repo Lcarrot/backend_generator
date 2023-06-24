@@ -16,7 +16,7 @@ import ru.tyshchenko.vkr.engine.resolver.type.mapper.Type;
 import java.nio.file.Files;
 import java.util.*;
 
-import static ru.tyshchenko.vkr.util.StringUtils.*;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor

@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.tyshchenko.vkr.util.StringUtils.*;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor

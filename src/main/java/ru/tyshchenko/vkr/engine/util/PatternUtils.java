@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.util;
+package ru.tyshchenko.vkr.engine.util;
 
 import lombok.SneakyThrows;
 import org.springframework.util.ResourceUtils;

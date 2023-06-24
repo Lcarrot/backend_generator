@@ -1,14 +1,14 @@
-package ru.tyshchenko.vkr.service;
+package ru.tyshchenko.vkr.app.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
-import ru.tyshchenko.vkr.context.SimpleBuilderContext;
+import ru.tyshchenko.vkr.app.context.SimpleBuilderContext;
 import ru.tyshchenko.vkr.engine.api.models.general.GeneralInfoDto;
 import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
-import ru.tyshchenko.vkr.util.PathUtils;
+import ru.tyshchenko.vkr.engine.util.PathUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static ru.tyshchenko.vkr.util.StringUtils.*;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor

@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 import static ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder.*;
 import static ru.tyshchenko.vkr.engine.api.factory.entity.classes.EntityClassPlaceholder.ID_FIElD;
 import static ru.tyshchenko.vkr.engine.api.factory.entity.sql.SqlDefaultPlaceholder.TABLE_NAME;
-import static ru.tyshchenko.vkr.util.PatternUtils.buildImports;
-import static ru.tyshchenko.vkr.util.PatternUtils.getPatternFromResource;
-import static ru.tyshchenko.vkr.util.StringUtils.*;
+import static ru.tyshchenko.vkr.engine.util.PatternUtils.buildImports;
+import static ru.tyshchenko.vkr.engine.util.PatternUtils.getPatternFromResource;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor

@@ -18,9 +18,9 @@ import ru.tyshchenko.vkr.engine.resolver.type.mapper.ColumnTypeMapper;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.tyshchenko.vkr.util.ClassNameUtils.SERVICE;
-import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
-import static ru.tyshchenko.vkr.util.StringUtils.toUpperCaseFirstLetter;
+import static ru.tyshchenko.vkr.engine.util.ClassNameUtils.SERVICE;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.toCamelCase;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.toUpperCaseFirstLetter;
 
 @Component
 @RequiredArgsConstructor

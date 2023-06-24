@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.config;
+package ru.tyshchenko.vkr.app.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

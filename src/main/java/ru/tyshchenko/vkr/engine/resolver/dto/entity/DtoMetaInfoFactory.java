@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.toCamelCase;
 
 @Component
 @RequiredArgsConstructor

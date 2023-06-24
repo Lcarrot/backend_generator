@@ -21,9 +21,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
-import static ru.tyshchenko.vkr.util.ClassNameUtils.REPOSITORY;
-import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
-import static ru.tyshchenko.vkr.util.StringUtils.toUpperCaseFirstLetter;
+import static ru.tyshchenko.vkr.engine.util.ClassNameUtils.REPOSITORY;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.toCamelCase;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.toUpperCaseFirstLetter;
 
 @Component
 @RequiredArgsConstructor

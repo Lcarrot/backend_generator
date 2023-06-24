@@ -14,8 +14,8 @@ import ru.tyshchenko.vkr.engine.impl.SupportedDbLanguage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.tyshchenko.vkr.util.PatternUtils.getPatternFromResource;
-import static ru.tyshchenko.vkr.util.StringUtils.replaceByRegex;
+import static ru.tyshchenko.vkr.engine.util.PatternUtils.getPatternFromResource;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.replaceByRegex;
 
 @Component
 public class PostgresqlCodeFactory extends DefaultSqlCodeFactory {

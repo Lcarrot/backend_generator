@@ -1,13 +1,13 @@
-package ru.tyshchenko.vkr.service;
+package ru.tyshchenko.vkr.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.tyshchenko.vkr.context.SimpleBuilderContext;
+import ru.tyshchenko.vkr.app.context.SimpleBuilderContext;
 import ru.tyshchenko.vkr.engine.api.models.controller.api.ControllerApi;
 import ru.tyshchenko.vkr.engine.api.models.controller.source.ControllerSource;
 import ru.tyshchenko.vkr.engine.impl.SupportedControllerLanguage;
 import ru.tyshchenko.vkr.engine.resolver.controller.ControllerResolver;
-import ru.tyshchenko.vkr.util.UploadUtils;
+import ru.tyshchenko.vkr.engine.util.UploadUtils;
 
 import java.nio.file.Path;
 import java.util.Collections;

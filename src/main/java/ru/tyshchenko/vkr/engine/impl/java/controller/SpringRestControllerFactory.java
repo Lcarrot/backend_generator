@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
+import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
 import ru.tyshchenko.vkr.engine.api.factory.controller.ControllerFactory;
 import ru.tyshchenko.vkr.engine.api.models.controller.source.ControllerMethodSource;
 import ru.tyshchenko.vkr.engine.api.models.controller.source.ControllerSource;
 import ru.tyshchenko.vkr.engine.api.models.service.meta.ServiceInfo;
 import ru.tyshchenko.vkr.engine.api.models.service.meta.ServiceMethodInfo;
-import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
 import ru.tyshchenko.vkr.engine.impl.SupportedControllerLanguage;
 
 import java.nio.file.Files;
@@ -20,12 +20,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toMap;
-import static ru.tyshchenko.vkr.util.StringUtils.*;
+import static ru.tyshchenko.vkr.engine.util.StringUtils.*;
 
 @Component
 @RequiredArgsConstructor
 public class SpringRestControllerFactory implements ControllerFactory {
-
 
     private String controllerPattern;
     private String methodPattern;
@@ -48,7 +47,8 @@ public class SpringRestControllerFactory implements ControllerFactory {
                         .stream().collect(toMap(ServiceMethodInfo::getMethodName, Function.identity()))));
         for (var controllerSource : controllerSources) {
             var controllerBuilder = new StringBuilder(controllerPattern);
-            replaceByRegex(controllerBuilder, DefaultPlaceholder.CLASS_NAME, toUpperCaseFirstLetter(toCamelCase(controllerSource.getName())));
+            replaceByRegex(controllerBuilder, DefaultPlaceholder.CLASS_NAME,
+                    toUpperCaseFirstLetter(toCamelCase(controllerSource.getName())));
             replaceByRegex(controllerBuilder, "${service_name}",
                     toLowerCaseFirstLetter(toCamelCase(controllerSource.getService())));
             replaceByRegex(controllerBuilder, "${service_class}",
@@ -56,7 +56,7 @@ public class SpringRestControllerFactory implements ControllerFactory {
             String methods = buildMethods(controllerSource.getMethods(),
                     serviceMethodInfoMap.get(controllerSource.getService()), controllerSource.getService());
             replaceByRegex(controllerBuilder, "${methods}", methods);
-            controllers.put(controllerSource.getName(), controllerBuilder.toString());
+            controllers.put(controllerSource.getName() + "Controller", controllerBuilder.toString());
         }
         return controllers;
     }
@@ -84,6 +84,8 @@ public class SpringRestControllerFactory implements ControllerFactory {
                     toLowerCaseFirstLetter(toCamelCase(serviceName)));
             replaceByRegex(oneMethodBuilder, "${service_method}",
                     toLowerCaseFirstLetter(toCamelCase(serviceMethodInfo.getMethodName())));
+            replaceByRegex(oneMethodBuilder, DefaultPlaceholder.METHOD_NAME,
+                    toCamelCase(serviceMethodInfo.getMethodName()));
             methodsBuilder.append(oneMethodBuilder).append("\n");
         }
         return methodsBuilder.toString();

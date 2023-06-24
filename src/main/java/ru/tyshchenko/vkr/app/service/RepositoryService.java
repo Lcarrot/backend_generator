@@ -1,9 +1,9 @@
-package ru.tyshchenko.vkr.service;
+package ru.tyshchenko.vkr.app.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import ru.tyshchenko.vkr.context.SimpleBuilderContext;
+import ru.tyshchenko.vkr.app.context.SimpleBuilderContext;
 import ru.tyshchenko.vkr.engine.api.models.repository.api.RepositoryApi;
 import ru.tyshchenko.vkr.engine.api.models.repository.source.RepositorySource;
 import ru.tyshchenko.vkr.engine.impl.SupportedRepositoryLanguage;
@@ -12,7 +12,7 @@ import ru.tyshchenko.vkr.engine.resolver.dto.entity.DtoMetaInfoFactory;
 import ru.tyshchenko.vkr.engine.resolver.repository.RepositoryApiFactory;
 import ru.tyshchenko.vkr.engine.resolver.repository.RepositoryMetaInfoFactory;
 import ru.tyshchenko.vkr.engine.resolver.repository.RepositoryResolver;
-import ru.tyshchenko.vkr.util.UploadUtils;
+import ru.tyshchenko.vkr.engine.util.UploadUtils;
 
 import java.nio.file.Path;
 import java.util.List;

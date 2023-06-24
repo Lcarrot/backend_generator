@@ -1,4 +1,4 @@
-package ru.tyshchenko.vkr.util;
+package ru.tyshchenko.vkr.engine.util;
 
 import lombok.SneakyThrows;
 import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
@@ -6,9 +6,6 @@ import ru.tyshchenko.vkr.engine.api.factory.DefaultPlaceholder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
-
-import static ru.tyshchenko.vkr.util.StringUtils.toCamelCase;
-import static ru.tyshchenko.vkr.util.StringUtils.toUpperCaseFirstLetter;
 
 public class UploadUtils {
 
@@ -19,7 +16,7 @@ public class UploadUtils {
         }
         for (var file : files.entrySet()) {
             var value = file.getValue().replace(DefaultPlaceholder.PROJECT_PACKET, packet);
-            var filePath = dirPath.resolve(toUpperCaseFirstLetter(toCamelCase(file.getKey())) + PathUtils.EXTENSION);
+            var filePath = dirPath.resolve(StringUtils.toUpperCaseFirstLetter(StringUtils.toCamelCase(file.getKey())) + PathUtils.EXTENSION);
             Files.write(filePath, value.getBytes());
         }
     }
